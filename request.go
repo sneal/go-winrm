@@ -50,7 +50,7 @@ func NewExecuteCommandRequest(uri string, shellId string, command string, params
 	}
 	params.url = uri
 	message = soap.NewMessage()
-	defaultHeaders(message, params).Action("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/Command").ResourceURI("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd").ShellId(shellId).AddOption(soap.NewHeaderOption("WINRS_CONSOLEMODE_STDIN", "FALSE")).Build()
+	defaultHeaders(message, params).Action("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/Command").ResourceURI("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd").ShellId(shellId).AddOption(soap.NewHeaderOption("WINRS_CONSOLEMODE_STDIN", "TRUE")).AddOption(soap.NewHeaderOption("WINRS_SKIP_CMD_SHELL", "FALSE")).Build()
 
 	body := message.CreateBodyElement("CommandLine", soap.NS_WIN_SHELL)
 	commandElement := message.CreateElement(body, "Command", soap.NS_WIN_SHELL)

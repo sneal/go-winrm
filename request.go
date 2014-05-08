@@ -41,6 +41,8 @@ func NewDeleteShellRequest(uri string, shellId string, params *Parameters) (mess
 	message = soap.NewMessage()
 	defaultHeaders(message, params).Action("http://schemas.xmlsoap.org/ws/2004/09/transfer/Delete").ShellId(shellId).ResourceURI("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd").Build()
 
+	message.NewBody()
+
 	return
 }
 

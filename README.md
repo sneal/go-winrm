@@ -1,13 +1,8 @@
 # WinRM for Go
 
-This is a Go library to execute remote commands on Windows machines through
-the use of WinRM.
+### _NOTE_ This library does not have a stable API, use at your own risk!
 
-_Note_: this library doesn't support domain users (it doesn't support GSSAPI nor Kerberos).
-
-## Contact
-
-- Bugs: https://github.com/sneal/go-winrm/issues
+This is a Go library to execute remote commands on Windows machines through the use of WinRM. This library doesn't support domain users (it doesn't support GSSAPI nor Kerberos).
 
 
 ## Getting Started
@@ -58,53 +53,30 @@ go version
 For the fast version (this doesn't allow to send input to the command):
 
 ```go
-import "github.com/sneal/go-winrm"
-
-client := winrm.NewClient("localhost", "Administrator", "secret")
-client.Run("ipconfig /all", os.Stdout, os.Stderr)
-```
-
-or
-```go
-import "github.com/sneal/go-winrm/winrm"
-
-client := winrm.NewClient("localhost", "Administrator", "secret")
-stdout, stderr, _ := client.RunWithString("ipconfig /all", "")
-println(stdout)
-println(stderr)
-```
-
-For a more complex example, it is possible to call the various functions directly:
-
-```go
 import (
-  "github.com/sneal/go-winrm/winrm"
-  "fmt"
-  "bytes"
   "os"
+  "fmt"
+  "github.com/sneal/go-winrm"
 )
 
-stdin := bytes.NewBufferString("ipconfig /all")
-
-client := winrm.NewClient("localhost", "Administrator", "secret")
 shell, err := client.CreateShell()
 if err != nil {
-  fmt.Printf("Impossible to create shell %s\n", err)
-  os.Exit(1)
-}
-var cmd *Command
-cmd, err = shell.Execute("cmd.exe")
-if err != nil {
-  fmt.Printf("Impossible to create Command %s\n", err)
-  os.Exit(1)
+  return err
 }
 
-go io.Copy(cmd.Stdin, &stdin)
-go io.Copy(os.Stdout, cmd.Stdout)
-go io.Copy(os.Stderr, cmd.Stderr)
+var cmd *winrm.Command
+cmd, err = shell.Execute(winrm.Powershell("Write-Host 'hello from PS'"), os.Stdout, os.Stderr)
+if err != nil {
+  return err
+}
 
 cmd.Wait()
-shell.Close()
+
+if cmd.ExitCode() != 0 {
+  fmt.Println("Command failed")
+}
+
+
 ```
 
 ## Developing on WinRM

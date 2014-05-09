@@ -31,7 +31,7 @@ func newCommand(shell *Shell, commandId string, stdout io.Writer, stderr io.Writ
 	}
 	if command.Stderr == nil {
 		command.Stderr = ioutil.Discard
-	}	
+	}
 
 	go fetchOutput(command)
 
@@ -127,4 +127,3 @@ func (command *Command) Wait() {
 	// block until finished
 	<-command.done
 }
-

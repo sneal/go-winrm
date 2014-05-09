@@ -56,4 +56,3 @@ func (client *Client) CreateShell() (shell *Shell, err error) {
 func (client *Client) sendRequest(request *soap.SoapMessage) (response string, err error) {
 	return client.http(client, request)
 }
-

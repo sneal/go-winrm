@@ -104,11 +104,12 @@ func NewSignalRequest(uri string, shellId string, commandId string, params *Para
 	params.url = uri
 	message = soap.NewMessage()
 
-	defaultHeaders(message, params).Action("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/Command").ResourceURI("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd").ShellId(shellId).Build()
+	defaultHeaders(message, params).Action("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/Signal").ResourceURI("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd").ShellId(shellId).Build()
 
 	signal := message.CreateBodyElement("Signal", soap.NS_WIN_SHELL)
 	signal.SetAttr("CommandId", commandId)
 	code := message.CreateElement(signal, "Code", soap.NS_WIN_SHELL)
 	code.SetContent("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/signal/terminate")
+
 	return
 }
